@@ -2,7 +2,7 @@ locals {
   autoscale_count = "${var.enable ? 1 : 0}"
 }
 
-resource "aws_autoscaling_policy" "scaleoutpolicy" {
+resource "aws_autoscaling_policy" "scale_out_policy" {
   name                   = "ecs-cluster-${var.cluster_name}-scale-out-policy"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
@@ -12,26 +12,19 @@ resource "aws_autoscaling_policy" "scaleoutpolicy" {
   count = "${local.autoscale_count}"
 }
 
-resource "aws_cloudwatch_metric_alarm" "scaleoutalaram" {
-  alarm_name          = "ecs-cluster-${var.cluster_name}-scale-out-alarm"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "${var.scale_out_evaluation_periods}"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/ECS"
-  period              = "${var.scale_out_period}"
-  statistic           = "Average"
-  threshold           = "${var.scale_out_threshold}"
+module "scale_out_alarm" {
+  source = "../alarm"
 
-  dimensions {
-    ClusterName = "${var.cluster_name}"
-  }
-
-  alarm_actions = ["${aws_autoscaling_policy.scaleoutpolicy.arn}"]
-
-  count = "${local.autoscale_count}"
+  enable             = "${local.autoscale_count}"
+  cluster_name       = "${var.cluster_name}"
+  period             = "${var.scale_out_period}"
+  evaluation_periods = "${var.scale_out_evaluation_periods}"
+  statistic          = "${var.scale_out_statistic}"
+  threshold          = "${var.scale_out_threshold}"
+  policy_arn         = "${join("", aws_autoscaling_policy.scale_out_policy.*.arn)}"
 }
 
-resource "aws_autoscaling_policy" "scaleinpolicy" {
+resource "aws_autoscaling_policy" "scale_in_policy" {
   name                   = "ecs-cluster-${var.cluster_name}-scale-in-policy"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
@@ -41,21 +34,15 @@ resource "aws_autoscaling_policy" "scaleinpolicy" {
   count = "${local.autoscale_count}"
 }
 
-resource "aws_cloudwatch_metric_alarm" "scaleinalaram" {
-  alarm_name          = "ecs-cluster-${var.cluster_name}-scale-in-alarm"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods  = "${var.scale_in_evaluation_periods}"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/ECS"
-  period              = "${var.scale_in_period}"
-  statistic           = "Average"
-  threshold           = "${var.scale_in_threshold}"
+module "scale_in_alarm" {
+  source = "../alarm"
 
-  dimensions {
-    ClusterName = "${var.cluster_name}"
-  }
-
-  alarm_actions = ["${aws_autoscaling_policy.scaleinpolicy.arn}"]
-
-  count = "${local.autoscale_count}"
+  enable             = "${local.autoscale_count}"
+  scale_type         = "in"
+  cluster_name       = "${var.cluster_name}"
+  period             = "${var.scale_in_period}"
+  evaluation_periods = "${var.scale_in_evaluation_periods}"
+  statistic          = "${var.scale_in_statistic}"
+  threshold          = "${var.scale_in_threshold}"
+  policy_arn         = "${join("", aws_autoscaling_policy.scale_in_policy.*.arn)}"
 }
