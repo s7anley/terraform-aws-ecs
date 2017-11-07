@@ -25,6 +25,8 @@ variable "max_healthy_percent" {
   default     = 200
 }
 
+# Load balancing
+
 variable "has_load_balancer" {
   description = "Create and associate application load balancer with service."
   default     = false
@@ -70,4 +72,76 @@ variable "container_name" {
 variable "container_port" {
   description = "The port on the container to associate with the load balancer."
   default     = 80
+}
+
+# Autoscale
+
+variable "autoscale" {
+  description = "Enable autoscaling for service."
+  default     = false
+}
+
+variable "max_capacity" {
+  description = "The maximum number of running service containers."
+  default     = 4
+}
+
+variable "min_capacity" {
+  description = "The minimum number of running service containers."
+  default     = 1
+}
+
+variable "scaling_role" {
+  description = "The ARN of IAM role with associated policy AmazonEC2ContainerServiceAutoscaleRole."
+  default     = ""
+}
+
+variable "scale_out_cooldown" {
+  description = "The amount of time, in seconds, after a scaling activity completes and before the next scaling out activity can start."
+  default     = 120
+}
+
+variable "scale_out_evaluation_periods" {
+  description = "The number of periods over which data is compared to the specified threshold for scaling out alarm."
+  default     = 3
+}
+
+variable "scale_out_statistic" {
+  description = "The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum."
+  default     = "Average"
+}
+
+variable "scale_out_period" {
+  description = "The period in seconds over which the specified statistic is applied for scaling out alarm."
+  default     = 60
+}
+
+variable "scale_out_threshold" {
+  description = "The value against which the specified statistic is compared for scaling out alarm."
+  default     = 80
+}
+
+variable "scale_in_cooldown" {
+  description = "The amount of time, in seconds, after a scaling activity completes and before the next scaling in activity can start."
+  default     = 300
+}
+
+variable "scale_in_evaluation_periods" {
+  description = "The number of periods over which data is compared to the specified threshold for scaling in alarm."
+  default     = 1
+}
+
+variable "scale_in_statistic" {
+  description = "The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum."
+  default     = "Average"
+}
+
+variable "scale_in_period" {
+  description = "The period in seconds over which the specified statistic is applied for scaling in alarm."
+  default     = 300
+}
+
+variable "scale_in_threshold" {
+  description = "The value against which the specified statistic is compared for scaling in alarm."
+  default     = 15
 }

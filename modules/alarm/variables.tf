@@ -8,6 +8,11 @@ variable "cluster_name" {
   description = "The name of the ECS Cluster."
 }
 
+variable "service_name" {
+  description = "The name of the service."
+  default     = ""
+}
+
 variable "scale_type" {
   description = "Type of scaling. Either of the following is supported in or out."
   default     = "out"
