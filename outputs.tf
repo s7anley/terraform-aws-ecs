@@ -9,3 +9,7 @@ output "cluster_name" {
 output "service_role_id" {
   value = "${module.iam.service_role_id}"
 }
+
+output "autoscale_role_arn" {
+  value = "${module.iam.autoscale_role_arn}"
+}

@@ -9,11 +9,21 @@ variable "instance_role_name" {
 }
 
 variable "service_role" {
-  description = "Name of existing IAM role with  attached AmazonEC2ContainerServiceRole policy."
+  description = "Name of existing IAM role with attached AmazonEC2ContainerServiceRole policy."
   default     = ""
 }
 
 variable "service_role_name" {
   description = "The name of the role for ECS service which uses ELB. Creation of new role is skipped, if you specify service_role."
   default     = "ecs-service-role"
+}
+
+variable "autoscale_role" {
+  description = "Name of existing IAM role with attached AmazonEC2ContainerServiceAutoscaleRole policy."
+  default     = ""
+}
+
+variable "autoscale_role_name" {
+  description = "The name of the role for ECS service which could be autoscaled. Creation of new role is skipped, if you specify autoscale_role."
+  default     = "ecs-autoscale-role"
 }
