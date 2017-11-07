@@ -72,9 +72,14 @@ variable "block_device_size" {
   default     = 50
 }
 
-variable "skip_autoscaling_group" {
-  description = "Skip creation of autoscaling group."
-  default     = false
+variable "autoscale" {
+  description = "Configure alarms and auto scale ecs cluster."
+  default     = true
+}
+
+variable "autoscaling_group" {
+  description = "Name of the already existing autoscaling group. Creation of new group will be skipped."
+  default     = ""
 }
 
 variable "max_size" {

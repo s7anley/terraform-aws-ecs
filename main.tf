@@ -90,5 +90,12 @@ resource "aws_autoscaling_group" "default" {
     create_before_destroy = true
   }
 
-  count = "${var.skip_autoscaling_group ? 0 : 1}"
+  count = "${var.autoscaling_group == "" ? 1 : 0}"
+}
+
+module "scaling" {
+  enable                 = "${var.autoscale}"
+  source                 = "./modules/scaling"
+  cluster_name           = "${aws_ecs_cluster.default.name}"
+  autoscaling_group_name = "${coalesce(var.autoscaling_group, join("", aws_autoscaling_group.default.*.name))}"
 }
