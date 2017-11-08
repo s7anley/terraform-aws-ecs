@@ -1,11 +1,11 @@
 module "iam" {
   source = "./modules/iam"
 
-  instance_profile   = "${var.instance_profile}"
-  instance_role_name = "${var.instance_role_name}"
-
-  service_role      = "${var.service_role}"
-  service_role_name = "${var.service_role_name}"
+  instance_role_name       = "${var.instance_role_name}"
+  load_balancing_role_name = "${var.load_balancing_role_name}"
+  skip_load_balancing_role = "${var.skip_load_balancing_role}"
+  autoscale_role_name      = "${var.autoscale_role_name}"
+  skip_autoscale_role      = "${var.skip_autoscale_role}"
 }
 
 resource "aws_ecs_cluster" "default" {
@@ -70,7 +70,7 @@ resource "aws_autoscaling_group" "default" {
   desired_capacity          = "${var.desired_capacity}"
   wait_for_capacity_timeout = "${var.wait_for_capacity_timeout}"
 
-  availability_zones  = ["${var.default_vpc_azs}"]
+  availability_zones  = ["${var.vpc_azs}"]
   vpc_zone_identifier = ["${var.vpc_subnets}"]
 
   tags = [

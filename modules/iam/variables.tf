@@ -1,29 +1,21 @@
-variable "instance_profile" {
-  description = "Name of existing IAM role with  attached AmazonEC2ContainerServiceforEC2Role policy."
-  default     = ""
-}
-
 variable "instance_role_name" {
-  description = "The name of the role used for instance profile. Creation of new role and instance profile is skipped, if you specify instance_profile."
-  default     = "ecs-instance-role"
+  description = "The name of the role used for instance profile."
 }
 
-variable "service_role" {
-  description = "Name of existing IAM role with attached AmazonEC2ContainerServiceRole policy."
-  default     = ""
+variable "load_balancing_role_name" {
+  description = "The name of the IAM role which allow ECS service to use ALB."
 }
 
-variable "service_role_name" {
-  description = "The name of the role for ECS service which uses ELB. Creation of new role is skipped, if you specify service_role."
-  default     = "ecs-service-role"
-}
-
-variable "autoscale_role" {
-  description = "Name of existing IAM role with attached AmazonEC2ContainerServiceAutoscaleRole policy."
-  default     = ""
+variable "skip_load_balancing_role" {
+  description = "Skip creation of IAM role associated with load balanced service."
+  default     = false
 }
 
 variable "autoscale_role_name" {
   description = "The name of the role for ECS service which could be autoscaled. Creation of new role is skipped, if you specify autoscale_role."
-  default     = "ecs-autoscale-role"
+}
+
+variable "skip_autoscale_role" {
+  description = "Skip creation of IAM role associated with auto scaled service."
+  default     = false
 }

@@ -1,21 +1,26 @@
-variable "instance_profile" {
-  description = "Name of existing IAM role with  attached AmazonEC2ContainerServiceforEC2Role policy."
-  default     = ""
-}
-
 variable "instance_role_name" {
-  description = "The name of the role used for instance profile. Creation of new role and instance profile is skipped, if you specify instance_profile."
+  description = "The name of the role used for instance profile."
   default     = "ecs-instance-role"
 }
 
-variable "service_role" {
-  description = "Name of existing of IAM role for ECS containers. If service has a load balancer, IAM role has to have AmazonEC2ContainerServiceRole policy attached."
-  default     = ""
+variable "load_balancing_role_name" {
+  description = "The name of the IAM role which allow ECS service to use ALB."
+  default     = "ecs-service-role"
 }
 
-variable "service_role_name" {
-  description = "The name of the default role for ECS service. Creation of new role is skipped, if you specify service_role."
-  default     = "ecs-service-role"
+variable "skip_load_balancing_role" {
+  description = "Skip creation of IAM role associated with load balanced service."
+  default     = false
+}
+
+variable "autoscale_role_name" {
+  description = "The name of the role for ECS service which could be autoscaled. Creation of new role is skipped, if you specify autoscale_role."
+  default     = "ecs-autoscale-role"
+}
+
+variable "skip_autoscale_role" {
+  description = "Skip creation of IAM role associated with auto scaled service."
+  default     = false
 }
 
 variable "cluster_name" {
@@ -24,6 +29,7 @@ variable "cluster_name" {
 
 variable "key_name" {
   description = "The name for the key pair."
+  default     = ""
 }
 
 variable "key_file" {
@@ -63,7 +69,7 @@ variable "spot_price" {
 }
 
 variable "placement_tenancy" {
-  description = "The tenancy of the instance. Valid values are default or dedicated"
+  description = "The tenancy of the instance. Valid values are default or dedicated."
   default     = "default"
 }
 
@@ -102,7 +108,7 @@ variable "wait_for_capacity_timeout" {
   default     = 0
 }
 
-variable "default_vpc_azs" {
+variable "vpc_azs" {
   type        = "list"
   description = "A list of AZs to launch resources in default VPC. Required only if you do not specify any vpc_subnets."
   default     = []
@@ -116,16 +122,7 @@ variable "vpc_subnets" {
 
 variable "metrics" {
   type        = "list"
-  description = "A list of metrics to collect."
+  description = "A list of metrics to collect. Supported metrics: GroupMinSize, GroupMaxSize, GroupDesiredCapacity, GroupInServiceInstances, GroupPendingInstances, GroupStandbyInstances, GroupTerminatingInstances, GroupTotalInstances."
 
-  default = [
-    "GroupMinSize",
-    "GroupMaxSize",
-    "GroupDesiredCapacity",
-    "GroupInServiceInstances",
-    "GroupPendingInstances",
-    "GroupStandbyInstances",
-    "GroupTerminatingInstances",
-    "GroupTotalInstances",
-  ]
+  default = []
 }

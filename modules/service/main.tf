@@ -2,6 +2,11 @@ data "aws_ecs_cluster" "default" {
   cluster_name = "${var.cluster_name}"
 }
 
+data "aws_iam_role" "default" {
+  name  = "${var.service_role}"
+  count = "${var.service_role == "" ? 0 : 1}"
+}
+
 resource "aws_ecs_service" "default" {
   count = "${var.has_load_balancer ? 0 : 1}"
 
@@ -9,7 +14,8 @@ resource "aws_ecs_service" "default" {
   cluster         = "${data.aws_ecs_cluster.default.id}"
   task_definition = "${var.task_definition}"
   desired_count   = "${var.desired_count}"
-  iam_role        = "${var.service_role_id}"
+  iam_role        = "${var.service_role == "" ? "" : .arn}"
+  iam_role        = "${coalesce(var.service_role, join("", data.aws_iam_role.default.*.arn))}"
 
   deployment_maximum_percent         = "${var.max_healthy_percent}"
   deployment_minimum_healthy_percent = "${var.min_healthy_percent}"
@@ -78,7 +84,7 @@ resource "aws_ecs_service" "default-alb" {
   cluster         = "${data.aws_ecs_cluster.default.id}"
   task_definition = "${var.task_definition}"
   desired_count   = "${var.desired_count}"
-  iam_role        = "${var.service_role_id}"
+  iam_role        = "${data.aws_iam_role.default.arn}"
 
   deployment_maximum_percent         = "${var.max_healthy_percent}"
   deployment_minimum_healthy_percent = "${var.min_healthy_percent}"
@@ -107,11 +113,17 @@ locals {
   resource_id = "service/${var.cluster_name}/${var.name}"
 }
 
+data "aws_iam_role" "scaling_role" {
+  name = "${var.scaling_role}"
+
+  count = "${var.autoscale ? 1 : 0}"
+}
+
 resource "aws_appautoscaling_target" "default" {
   max_capacity       = "${var.max_capacity}"
   min_capacity       = "${var.min_capacity}"
   resource_id        = "${local.resource_id}"
-  role_arn           = "${var.scaling_role}"
+  role_arn           = "${data.aws_iam_role.scaling_role.arn}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 

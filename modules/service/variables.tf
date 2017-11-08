@@ -37,8 +37,8 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "service_role_id" {
-  description = "The ARN of IAM role to attach with container. If service has load balancer, IAM role has to have AmazonEC2ContainerServiceRole policy attached."
+variable "service_role" {
+  description = "The name of IAM role to attach with container. If service has load balancer, IAM role has to have AmazonEC2ContainerServiceRole policy attached."
   default     = ""
 }
 
@@ -92,7 +92,7 @@ variable "min_capacity" {
 }
 
 variable "scaling_role" {
-  description = "The ARN of IAM role with associated policy AmazonEC2ContainerServiceAutoscaleRole."
+  description = "The name of IAM role with associated policy AmazonEC2ContainerServiceAutoscaleRole."
   default     = ""
 }
 
