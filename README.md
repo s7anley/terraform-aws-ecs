@@ -53,7 +53,7 @@ module "webservice" {
 
   # autoscale
   autoscale    = true
-  scaling_role = "${module.ecs.autoscale_role_arn}"
+  scaling_role = "${module.ecs.autoscale_role_name}"
 
   # load balancing
   has_load_balancer   = true
@@ -62,7 +62,7 @@ module "webservice" {
   vpc_id              = "${aws_vpc.default.id}"
   alb_subnets         = ["${aws_subnet.public.*.id}"]
   alb_security_groups = ["${aws_vpc.default.default_security_group_id}"]
-  service_role_id     = "${module.ecs.service_role_id}"
+  service_role        = "${module.ecs.load_balancing_role_name}"
 }
 ```
 
