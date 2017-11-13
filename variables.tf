@@ -78,6 +78,11 @@ variable "placement_tenancy" {
   default     = "default"
 }
 
+variable "ebs_optimized" {
+  description = "If true, the launched EC2 instance will be EBS-optimized."
+  default     = false
+}
+
 variable "block_device_size" {
   description = "The size of the volume in gigabytes."
   default     = 50

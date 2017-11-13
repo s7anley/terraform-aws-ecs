@@ -47,6 +47,7 @@ resource "aws_launch_configuration" "default" {
   security_groups      = ["${var.security_groups}"]
   user_data            = "#!/bin/bash\necho ECS_CLUSTER=${aws_ecs_cluster.default.name} > /etc/ecs/ecs.config"
   enable_monitoring    = "${var.enable_monitoring}"
+  ebs_optimized        = "${var.ebs_optimized}"
   spot_price           = "${var.spot_price}"
   placement_tenancy    = "${var.placement_tenancy}"
 
