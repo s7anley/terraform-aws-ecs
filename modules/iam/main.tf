@@ -1,6 +1,8 @@
 resource "aws_iam_role" "instance_role" {
   name               = "${var.instance_role_name}"
   assume_role_policy = "${file("${path.module}/policy/instance-role.json")}"
+
+  count = "${var.skip_instance_role ? 0 : 1}"
 }
 
 resource "aws_iam_policy_attachment" "instance_role_policy" {
@@ -8,6 +10,7 @@ resource "aws_iam_policy_attachment" "instance_role_policy" {
   roles      = ["${aws_iam_role.instance_role.name}"]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 
+  count      = "${var.skip_instance_role ? 0 : 1}"
   depends_on = ["aws_iam_role.instance_role"]
 }
 
@@ -15,6 +18,8 @@ resource "aws_iam_instance_profile" "instance_role_profile" {
   name = "${var.instance_role_name}-profile"
   path = "/"
   role = "${aws_iam_role.instance_role.name}"
+
+  count = "${var.skip_instance_role ? 0 : 1}"
 }
 
 resource "aws_iam_role" "load_balancing_role" {

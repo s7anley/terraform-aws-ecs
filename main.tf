@@ -2,6 +2,7 @@ module "iam" {
   source = "./modules/iam"
 
   instance_role_name       = "${var.instance_role_name}"
+  skip_instance_role       = "${var.skip_instance_role}"
   load_balancing_role_name = "${var.load_balancing_role_name}"
   skip_load_balancing_role = "${var.skip_load_balancing_role}"
   autoscale_role_name      = "${var.autoscale_role_name}"
@@ -37,7 +38,8 @@ resource "aws_launch_configuration" "default" {
   # only create new launch configuration if a name is not configured
   count = "${var.launch_configuration == "" ? 1 : 0}"
 
-  name                 = "${var.cluster_name}-lc"
+  # let terraform to generate name, to avoid problems during re-create
+  name_prefix          = "${var.cluster_name}"
   image_id             = "${var.image_id != "" ? var.image_id : data.aws_ami.default.id}"
   instance_type        = "${var.instance_type}"
   iam_instance_profile = "${module.iam.instance_profile_name}"
@@ -61,7 +63,7 @@ resource "aws_launch_configuration" "default" {
 }
 
 resource "aws_autoscaling_group" "default" {
-  name                 = "${var.cluster_name}-asg"
+  name_prefix          = "${var.cluster_name}"
   launch_configuration = "${coalesce(var.launch_configuration, join("", aws_launch_configuration.default.*.name))}"
   enabled_metrics      = ["${var.metrics}"]
 

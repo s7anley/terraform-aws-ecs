@@ -1,13 +1,13 @@
 output "instance_role_id" {
-  value = "${aws_iam_instance_profile.instance_role_profile.id}"
+  value = "${join("", aws_iam_role.instance_role.*.id)}"
 }
 
 output "instance_role_name" {
-  value = "${aws_iam_instance_profile.instance_role_profile.name}"
+  value = "${join("", aws_iam_role.instance_role.*.name)}"
 }
 
 output "instance_profile_name" {
-  value = "${aws_iam_instance_profile.instance_role_profile.name}"
+  value = "${join("", aws_iam_instance_profile.instance_role_profile.*.name)}"
 }
 
 output "load_balancing_role_id" {

@@ -3,6 +3,11 @@ variable "instance_role_name" {
   default     = "ecs-instance-role"
 }
 
+variable "skip_instance_role" {
+  description = "Skip creation of IAM role and profile associated with container instances."
+  default     = false
+}
+
 variable "load_balancing_role_name" {
   description = "The name of the IAM role which allow ECS service to use ALB."
   default     = "ecs-service-role"
