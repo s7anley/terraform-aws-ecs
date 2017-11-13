@@ -17,7 +17,7 @@ data "aws_ami" "default" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-*.a-amazon-ecs-optimized"]
+    values = ["amzn-ami-*-amazon-ecs-optimized"]
   }
 
   filter {

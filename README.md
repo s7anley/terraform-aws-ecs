@@ -8,7 +8,7 @@ This repo contains a modules to deploy a ECS Cluster, Tasks and Services on AWS 
 module "ecs" {
   source = "github.com/s7anley/terraform-amazon-ecs"
 
-  cluster_name  = "demo-cluster"
+  cluster_name = "demo-cluster"
 
   # ec2 instaces configuration
   key_name          = "existing-key"
@@ -20,6 +20,10 @@ module "ecs" {
   # scaling configuration
   min_size = 2
   max_size = 4
+
+  # It's recommended to define image_id, to avoid change of image once Amazon
+  # releases the new version of the image.
+  # image_id = "ami-20ff515a"
 }
 
 module "web" {

@@ -43,7 +43,7 @@ variable "launch_configuration" {
 }
 
 variable "image_id" {
-  description = "The EC2 image ID to launch. If omited, latest amazon-ecs-optimized image is used"
+  description = "The EC2 image ID to launch. If omitted, the latest amazon-ecs-optimized image is used. It's recommended to define image_id, to avoid change of image once Amazon releases the new version of the image."
   default     = ""
 }
 
