@@ -83,6 +83,11 @@ variable "ebs_optimized" {
   default     = false
 }
 
+variable "root_volume_size" {
+  description = "The size of the root volume in gigabytes."
+  default     = 8
+}
+
 variable "block_device_size" {
   description = "The size of the volume in gigabytes."
   default     = 50

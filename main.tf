@@ -51,6 +51,11 @@ resource "aws_launch_configuration" "default" {
   spot_price           = "${var.spot_price}"
   placement_tenancy    = "${var.placement_tenancy}"
 
+  root_block_device = {
+    volume_type = "gp2"
+    volume_size = "${var.root_volume_size}"
+  }
+
   # used for docker images, container volumes etc.
   ebs_block_device = {
     device_name = "/dev/xvdcz"
