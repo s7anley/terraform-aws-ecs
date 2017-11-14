@@ -7,11 +7,10 @@ data "template_file" "default" {
   template = "${file("${path.module}/task.json")}"
 
   vars {
-    name          = "${var.name}"
-    image         = "${var.image}"
-    cpu           = "${var.cpu}"
-    memory        = "${var.memory}"
-    task_role_arn = "${var.task_role_arn}"
+    name   = "${var.name}"
+    image  = "${var.image}"
+    cpu    = "${var.cpu}"
+    memory = "${var.memory}"
 
     environment_vars = "${jsonencode(var.env_vars)}"
     entry_point      = "${jsonencode(var.entry_point)}"
@@ -30,4 +29,5 @@ data "template_file" "default" {
 resource "aws_ecs_task_definition" "default" {
   family                = "${var.name}"
   container_definitions = "${data.template_file.default.rendered}"
+  task_role_arn         = "${var.task_role_arn}"
 }
