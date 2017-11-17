@@ -2,7 +2,7 @@ locals {
   is_scale_out = "${var.scale_type == "out"}"
 
   name_sufix = "${local.is_scale_out ? "scale-out-alarm" : "scale-in-alarm"}"
-  comparison = "${local.is_scale_out ? "GreaterThanOrEqualToThreshold" : "LessThanOrEqualToThreshold"}"
+  comparison = "${local.is_scale_out ? "GreaterThanOrEqualToThreshold" : "LessThanThreshold"}"
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_cluster_alarm" {
