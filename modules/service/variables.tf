@@ -96,6 +96,11 @@ variable "scaling_role" {
   default     = ""
 }
 
+variable "scaling_metric" {
+  description = "The name for the alarm's associated metric. Either of the following is supported MemoryUtilization or CPUUtilization."
+  default     = "CPUUtilization"
+}
+
 variable "scale_out_cooldown" {
   description = "The amount of time, in seconds, after a scaling activity completes and before the next scaling out activity can start."
   default     = 120

@@ -155,6 +155,7 @@ module "scale_out_alarm" {
   source = "../alarm"
 
   enable             = "${var.autoscale}"
+  metric_name        = "${var.scaling_metric}"
   cluster_name       = "${var.cluster_name}"
   service_name       = "${var.name}"
   period             = "${var.scale_out_period}"
@@ -189,6 +190,7 @@ module "scale_in_alarm" {
   source = "../alarm"
 
   enable             = "${var.autoscale}"
+  metric_name        = "${var.scaling_metric}"
   scale_type         = "in"
   cluster_name       = "${var.cluster_name}"
   service_name       = "${var.name}"
